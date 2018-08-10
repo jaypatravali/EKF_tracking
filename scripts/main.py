@@ -95,53 +95,54 @@ class EFK(object):
 
         self.gt_data = scipy.io.loadmat('../data/object_trajectory.mat')['x_traj_pos']
 
-    # def correction_step(self, timestep, sensor_data):
-    #     """
-    #     Performs Measurement update
-    #      and correction
-    #     """
-
-    #     X = self.mu[0][0]
-    #     Y = self.mu[1][0]
-    #     total = (X**2 + Y**2)
-
-    #     H = np.array([[X*math.sqrt(total),  Y*math.sqrt(total), 0.0, 0.0],
-    #                  [-Y/total,             X/total,           0.0,  0.0]])
-
-    #     h_fn = np.array([[total**0.5 + np.random.normal(0, self.sigma_r)],
-    #                      [math.atan2(Y, X) + np.random.normal(0, self.sigma_a)]])
-
-    #     Z = np.array([[sensor_data[0]], [sensor_data[1]]])
-
-    #     K_intermediate = np.linalg.inv(np.dot(np.dot(H, self.P), np.transpose(H)) + self.R)
-    #     K = np.dot(np.dot(self.P, np.transpose(H)), K_intermediate)
-    #     self.mu = self.mu + np.dot(K, (Z - h_fn))
-    #     self.P = np.dot(np.eye(len(self.P)) - np.dot(K, H), self.P)
-
     def correction_step(self, timestep, sensor_data):
         """
         Performs Measurement update
-        and correction.
-        Express h_fn and H in
-        X and Y
+         and correction
         """
 
         X = self.mu[0][0]
         Y = self.mu[1][0]
         total = (X**2 + Y**2)
 
-        h_fn = np.array([[X + np.random.normal(0, self.sigma_r)],
-                         [Y + np.random.normal(0, self.sigma_a)]])
+        H = np.array([[X/math.sqrt(total),  Y/math.sqrt(total), 0.0, 0.0],
+                     [-Y/total,             X/total,            0.0,  0.0]])
 
-        H = np.array([[1,  0.0,   0.0, 0.0],
-                     [0.0,  1,    0.0, 0.0]])
+        h_fn = np.array([[total**0.5],
+                         [math.atan2(Y, X)]])
 
-        Z = np.array([[sensor_data[0]*np.cos(sensor_data[1])], [sensor_data[0]*np.sin(sensor_data[1])]])
+        Z = np.array([[sensor_data[0]],
+                      [sensor_data[1]]])
 
         K_intermediate = np.linalg.inv(np.dot(np.dot(H, self.P), np.transpose(H)) + self.R)
         K = np.dot(np.dot(self.P, np.transpose(H)), K_intermediate)
         self.mu = self.mu + np.dot(K, (Z - h_fn))
         self.P = np.dot(np.eye(len(self.P)) - np.dot(K, H), self.P)
+
+    # def correction_step(self, timestep, sensor_data):
+    #     """
+    #     Performs Measurement update
+    #     and correction.
+    #     Express h_fn and H in
+    #     X and Y
+    #     """
+
+    #     X = self.mu[0][0]
+    #     Y = self.mu[1][0]
+    #     total = (X**2 + Y**2)
+
+    #     h_fn = np.array([[X],
+    #                      [Y]])
+
+    #     H = np.array([[1,  0.0,   0.0, 0.0],
+    #                  [0.0,  1,    0.0, 0.0]])
+
+    #     Z = np.array([[sensor_data[0]*np.cos(sensor_data[1])], [sensor_data[0]*np.sin(sensor_data[1])]])
+
+    #     K_intermediate = np.linalg.inv(np.dot(np.dot(H, self.P), np.transpose(H)) + self.R)
+    #     K = np.dot(np.dot(self.P, np.transpose(H)), K_intermediate)
+    #     self.mu = self.mu + np.dot(K, (Z - h_fn))
+    #     self.P = np.dot(np.eye(len(self.P)) - np.dot(K, H), self.P)
 
     def prediction_step(self, timestep):
         """

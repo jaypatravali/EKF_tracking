@@ -145,7 +145,6 @@ I =
 \]
 
 
-\begin{comment}
 \[
 h_{k}(\hat{x}_{k})=
   \begin{bmatrix}
@@ -156,6 +155,16 @@ h_{k}(\hat{x}_{k})=
 \]
 
 \[
+z_{k}=
+  \begin{bmatrix}
+     meas\_range  \\
+     meas\_angle\\
+
+  \end{bmatrix}
+\]
+
+
+\[
 H_{k} = \frac{\partial h}{\partial (x, y, vx, vy)} =
 \begin{bmatrix}
 \frac{\partial h}{\partial x} \sqrt{  \hat{x}_k^{2} + \hat{y}_k^{2}} & 0 & \frac{\partial h}{\partial y} \sqrt{  \hat{x}_k^{2} + \hat{y}_k^{2}} & 0\\
@@ -164,13 +173,13 @@ H_{k} = \frac{\partial h}{\partial (x, y, vx, vy)} =
 \end{bmatrix}
 =
   \begin{bmatrix}
-\hat{x} \sqrt{  \hat{x}_k^{2} + \hat{y}_k^{2}} & 0 & \hat{y} \sqrt{  \hat{x}_k^{2} + \hat{y}_k^{2}} & 0\\
-\frac{-\hat{y}}{  \hat{x}_k^{2} + \hat{y}_k^{2}} & 0 & \frac{\hat{x}_k}{  \hat{x}_k^{2} + \hat{y}_k^{2}} & 0\\
+\frac{\hat{x_{k}}}{ \sqrt{\hat{x}_k^{2} + \hat{y}_k^{2}}} & \frac{\hat{y_{k}}}{ \sqrt{\hat{x}_k^{2} + \hat{y}_k^{2}}} & 0 & 0\\
+\frac{-\hat{y_{k}}}{  \hat{x}_k^{2} + \hat{y}_k^{2}} & \frac{\hat{x}_k}{  \hat{x}_k^{2} + \hat{y}_k^{2}}  & 0 & 0\\
 
   \end{bmatrix}
 \]
 
-\end{comment}
+\begin{comment}
 
 \[
 h_{k}(\hat{x}_{k})=
@@ -205,7 +214,7 @@ H_{k} = \frac{\partial h}{\partial (x, y, vx, vy)} =
 0 & 1 & 0 & 0\\
   \end{bmatrix}
 \]
-
+\end{comment}
 
 
 
@@ -225,13 +234,22 @@ and these variables are described as follows ,
     \item[$-$] $F_{k}$ is state transition matrix
     \item[$-$] $Q_{k}$ is covariance matrix of process noise, $q$ is a tunable scaling factor.
 	\item[$-$] $R$ is measurement noise covariance matrix, with $\sigma_{r}^{2}$ and $\sigma_{a}^{2}$ as variance in range and angle for a zero mean gaussian distribution.
+    \item[$-$] $z_{k}$ is the observed measurements obtained from the sensor. In this case range and azimuth angle.
+ 
+    \item[$-$] $h_{k}(\hat{x}_{k})$ is observation function that describes  measurements  predicted from the state in X and Y.
+    \item[$-$] $H_{k}$ is jacobian of observation function $h_{k}(\hat{x}_{k})$ evaluated at the current estimate of the state from the prediction step.
+    \item[$-$] $\hat{x}_{k}$ is mean  of distribution of state estimated by the EKF.
+    \item[$-$] $K$ is the Kalman gain.
+
+
+\begin{comment}
     \item[$-$] $z_{k}$ is the observed state derived from the measurements obtained from the sensor. In this case range and azimuth angle is transformed into X and Y states.
  
     \item[$-$] $h_{k}(\hat{x}_{k})$ is observation function that describes predicted state in X and Y with added gaussian noise -- $n_{1}$, $n_{2}$ that are drawn from $N(0, \sigma_{r}^{2})$ and $N(0, \sigma_{a}^{2})$ respectively. 
     \item[$-$] $H_{k}$ is jacobian of observation function $h_{k}(\hat{x}_{k})$ evaluated at the current estimate of the state from the prediction step.
     \item[$-$] $\hat{x}_{k}$ is mean  of distribution of state estimated by the EKF.
     \item[$-$] $K$ is the Kalman gain.
-
+\end{comment}
 
 \end{itemize}
 \section{Generating sensor measurements}
