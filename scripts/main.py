@@ -204,7 +204,7 @@ class EFK(object):
         axarr[0].legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
         plt.subplots_adjust(left=0.07, bottom=0.08, right=0.77, top=0.84)
-        plt.legend()
+        # plt.legend()
         plt.show("hold")
 
     def visualize_path(self, prediction, timestep, sensor_data):
@@ -267,7 +267,7 @@ class EFK(object):
 
         print("Running an EKF for 100 Monte Carlo Simulations")
         for q_val in self.q_list:
-            for sample in range(1):
+            for sample in range(100):
                 sensor_readings = self.init_sample_params(q_val, sample)
                 for timestep in range(0, 500):
                     self.prediction_step(timestep+1)
